@@ -1,0 +1,11 @@
+{
+  "name": "request_change_collector",
+  "version": "1.0.0",
+  "description": "CTU FEE homework assignment",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "brabezd1@fel.cvut.cz",
+  "license": "ISC"
+}
