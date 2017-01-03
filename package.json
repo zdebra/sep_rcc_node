@@ -2,10 +2,20 @@
   "name": "request_change_collector",
   "version": "1.0.0",
   "description": "CTU FEE homework assignment",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "brabezd1@fel.cvut.cz",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "handlebars": "^4.0.6",
+    "hapi": "^16.1.0",
+    "hapi-auth-basic": "^4.2.0",
+    "hapi-auth-cookie": "^6.1.1",
+    "inert": "^4.1.0",
+    "vision": "^4.1.1"
+  },
+  "repository": "https://github.com/zdebra/sep_rcc_node"
 }
