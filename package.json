@@ -20,6 +20,7 @@
     "hapi-auth-basic": "^4.2.0",
     "hapi-auth-cookie": "^6.1.1",
     "inert": "^4.1.0",
+    "mongodb": "^2.2.19",
     "vision": "^4.1.1"
   },
   "repository": "https://github.com/zdebra/sep_rcc_node"
