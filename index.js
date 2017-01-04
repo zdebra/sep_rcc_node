@@ -1,10 +1,13 @@
 'use strict';
 
 const Hapi = require('hapi')
-const Cookie = require('hapi-auth-cookie')
+const CookieAuth = require('hapi-auth-cookie')
 const Vision = require('vision')
 const Handlebars = require('handlebars')
+const Good = require('good')
 
+const setupRoutes = require('./app/router')
+const validateFunc = require('./app/auth')
 
 const server = new Hapi.Server()
 
@@ -13,9 +16,43 @@ async function setup() {
 
     try {
 
-        server.connection({port: 8000})
+        server.connection({
+            port: 3000,
+            host: 'localhost',
+        })
 
-        await server.register(Vision)
+        await server.register([
+            {
+                register: Vision
+            },
+            {
+                register:CookieAuth
+            },
+            {
+                register: Good,
+                options: {
+                    ops: {
+                        interval: 10000
+                    },
+                    reporters: {
+                        console: [
+                            {
+                                module: 'good-squeeze',
+                                name: 'Squeeze',
+                                args: [ { log: '*', response: '*', request: '*' } ]
+                            },
+                            {
+                                module: 'good-console'
+                            },
+                            'stdout'
+                        ]
+                    }
+                }
+            }
+
+        ])
+
+        server.log('info', 'Plugins registered')
 
         server.views({
             engines: {
@@ -25,21 +62,27 @@ async function setup() {
             layout: true
         })
 
-        server.route({
-            method: 'GET',
-            path: '/',
-            handler: function (request, reply) {
-                let data = {message: 'hello there', title: 'kocka'}
-                reply.view('index', data)
-            }
+        server.log('info', 'View configuration completed')
+
+        server.auth.strategy('session', 'cookie', {
+            password: 'm!*"2/),p4:xDs%KEgVr7;e#85Ah^WYC',
+            isSecure: false,
+            validateFunc: validateFunc(server)
         })
+
+        server.log('info', 'Registered auth strategy: cookie auth')
+
+        setupRoutes(server)
+        server.log('info', 'Routes registered')
 
         await server.start()
 
-        console.log('Server running at:', server.info.uri)
+        server.log('info', 'Server running at: ' + server.info.uri)
 
     } catch (err) {
-        console.log('Server not running:', err)
+        server.log('error', 'failed to start server')
+        server.log('error', err)
+        throw err
     }
 
 }
