@@ -1,4 +1,7 @@
 'use strict';
+if(process.env.NODE_ENV === 'development') {
+    require('dotenv').config();
+}
 
 const Hapi = require('hapi')
 const CookieAuth = require('hapi-auth-cookie')
@@ -17,8 +20,7 @@ async function setup() {
     try {
 
         server.connection({
-            port: 3000,
-            host: 'localhost',
+            port: process.env.port,
         })
 
         await server.register([
@@ -65,7 +67,7 @@ async function setup() {
         server.log('info', 'View configuration completed')
 
         server.auth.strategy('session', 'cookie', {
-            password: 'm!*"2/),p4:xDs%KEgVr7;e#85Ah^WYC',
+            password: process.env.PASS_HASH,
             isSecure: false,
             validateFunc: validateFunc(server)
         })

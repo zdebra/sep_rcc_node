@@ -1,0 +1,10 @@
+version: '2'
+services:
+  webserver:
+    build: .
+    ports:
+      - "8000:3000"
+    environment:
+      - NODE_ENV=production
+      - PASS_HASH=m!*"2/),p4:xDs%KEgVr7;e#85Ah^WYC
+      - PORT=3000
