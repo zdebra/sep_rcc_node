@@ -34,10 +34,10 @@ module.exports = function (server) {
                     strategy: 'session',
                     mode: 'try',
                 },
-                handler: function (request, reply) {
+                handler: async function (request, reply) {
 
                     if(request.auth.isAuthenticated) {
-                        return reply.view('index')
+                        return reply.view('index',request.auth.credentials)
                     }
 
                     if(request.method === 'get') {
@@ -53,15 +53,13 @@ module.exports = function (server) {
 
                     const password = request.payload.password;
 
-                    return Bcrypt.compare(password, user.password, function (err, isValid) {
-                        if (isValid) {
-                            request.server.log('info', 'user authentication successful')
-                            request.cookieAuth.set(user);
-                            return reply.view('index')
-                        }
-
+                    if(await Bcrypt.compare(password, user.password)) {
+                        request.server.log('info', 'user authentication successful')
+                        request.cookieAuth.set(user);
+                        return reply.view('index', user)
+                    } else {
                         return reply.view('login')
-                    })
+                    }
                 }
             }
         },
