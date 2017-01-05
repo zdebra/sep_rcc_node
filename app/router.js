@@ -44,11 +44,14 @@ module.exports = function (server) {
                         return reply.view('login')
                     }
 
+                    const db = request.server.plugins['hapi-mongodb'].db;
+
                     const username = request.payload.username;
-                    let user = Users[username];
+                    let user = await Users.get(db,username)
 
                     if (!user) {
-                        return reply(Boom.notFound('No user registered with given credentials'))
+                        //return reply(Boom.notFound('No user registered with given credentials'))
+                        return reply.view('login',{message: "Invalid credentials."})
                     }
 
                     const password = request.payload.password;

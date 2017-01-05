@@ -1,8 +1,8 @@
-module.exports =  {
-    future: {
-        username: 'future',
-        password: '$2a$04$YPy8WdAtWswed8b9MfKixebJkVUhEZxQCrExQaxzhcdR2xMmpSJiG',   // 'studio'
-        name: 'Future Studio',
-        id: '1'
+module.exports = {
+
+    get: async function getUser(db, username) {
+
+        return await db.collection('user').findOne({username: username})
+
     }
-};
+}

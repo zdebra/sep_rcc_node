@@ -7,18 +7,18 @@ const MongoClient = require('mongodb').MongoClient
 
 const insertUsers = async function insertUsers(db) {
 
-    const hashedPass = await Bcrypt.hash('password', process.env.PASS_HASH)
+    const hashedPass = await Bcrypt.hash('passwordpassword', process.env.PASS_HASH)
 
     const collection = db.collection('user')
 
     return await collection.insertMany([
         {
             username: 'username',
-            password: hashedPass
+            password: process.env.PASS_HASH
         },
         {
             username: 'admin',
-            password: hashedPass
+            password: process.env.PASS_HASH
         }
     ])
 

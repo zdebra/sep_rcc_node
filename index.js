@@ -1,5 +1,10 @@
 'use strict';
-if(process.env.NODE_ENV === 'development') {
+
+process.on('unhandledRejection', (err) =>{
+    console.error(err)
+})
+
+if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
@@ -8,6 +13,7 @@ const CookieAuth = require('hapi-auth-cookie')
 const Vision = require('vision')
 const Handlebars = require('handlebars')
 const Good = require('good')
+const HapiMongoDb = require('hapi-mongodb')
 
 const setupRoutes = require('./app/router')
 const validateFunc = require('./app/auth')
@@ -20,7 +26,8 @@ async function setup() {
     try {
 
         server.connection({
-            port: process.env.port,
+            port: process.env.PORT,
+            host: process.env.HOST
         })
 
         await server.register([
@@ -49,6 +56,12 @@ async function setup() {
                             'stdout'
                         ]
                     }
+                }
+            },
+            {
+                register: HapiMongoDb,
+                options: {
+                    url: process.env.MONGO_DB_URL,
                 }
             }
 

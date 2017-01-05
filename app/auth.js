@@ -1,15 +1,17 @@
-const users = require('./users')
+const Users = require('./users')
 
 module.exports = function (server) {
 
-    return function validate (request, session, callback) {
+    return async function validate (request, session, callback) {
+        const db = request.server.plugins['hapi-mongodb'].db;
 
-         const username = session.username;
-         let user = users[username];
+        const username = session.username
 
-         if (!user) {
+        let user = await Users.get(db,username)
+
+        if (!user) {
             return callback(null, false)
-         }
+        }
 
         server.log('info', 'user authenticated')
         callback(null, true, user)
