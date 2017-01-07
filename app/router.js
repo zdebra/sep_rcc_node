@@ -1,6 +1,7 @@
 const Boom = require('boom');
 const Users = require('./users')
 const Bcrypt = require('bcrypt')
+let SoapService = require('./soap')
 
 module.exports = function (server) {
 
@@ -74,6 +75,29 @@ module.exports = function (server) {
                 handler: function (request, reply) {
                     request.cookieAuth.clear()
                     reply("You have been logged out.")
+                }
+            }
+        },
+        {
+            method: ['GET'],
+            path: '/customers',
+            config: {
+                auth: {
+                    mode: 'try',
+                    strategy: 'session'
+                },
+                handler: async function(request, reply) {
+
+                    if(!request.auth.isAuthenticated) {
+                        return reply.redirect('/login')
+                    }
+
+                    let session = request.auth.credentials
+
+                    let customers = await SoapService.listAllCustomers()
+
+                    reply.view('customers', {customers: customers})
+
                 }
             }
         }

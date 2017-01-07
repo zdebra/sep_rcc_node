@@ -14,6 +14,7 @@ const Vision = require('vision')
 const Handlebars = require('handlebars')
 const Good = require('good')
 const HapiMongoDb = require('hapi-mongodb')
+const path = require('path')
 
 const setupRoutes = require('./app/router')
 const validateFunc = require('./app/auth')
@@ -73,8 +74,9 @@ async function setup() {
             engines: {
                 html: Handlebars
             },
-            path: __dirname + '/views',
-            layout: true
+            path: path.join(__dirname, 'views'),
+            layoutPath: path.join(__dirname, 'views', 'layout'),
+            layout: 'default'
         })
 
         server.log('info', 'View configuration completed')
