@@ -21,5 +21,13 @@ module.exports = {
 
         return resp.Envelope.Body.ReadAllCustomersResponse1.customer
 
+    },
+
+    customerDetail: async function(id) {
+
+        let resp = await handsoap.request(url,'fel:ReadCustomerDetails', 'http://www.cvut.cz/FEL/ReadCustomerDetails', {id: id}, options)
+
+        return resp.Envelope.Body.ReadCustomerDetailsResponse1
+
     }
 }

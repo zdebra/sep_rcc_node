@@ -76,7 +76,8 @@ async function setup() {
             },
             path: path.join(__dirname, 'views'),
             layoutPath: path.join(__dirname, 'views', 'layout'),
-            layout: 'default'
+            layout: 'default',
+            partialsPath: path.join(__dirname, 'partials')
         })
 
         server.log('info', 'View configuration completed')

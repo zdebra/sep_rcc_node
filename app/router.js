@@ -100,7 +100,59 @@ module.exports = function (server) {
 
                 }
             }
-        }
+        },
+        {
+            method: ['GET', 'POST'],
+            path: '/customer/{id}',
+            config: {
+                auth: {
+                    mode: 'try',
+                    strategy: 'session'
+                },
+                handler: async function(request, reply) {
+
+                    if(!request.auth.isAuthenticated) {
+                        return reply.redirect('/login')
+                    }
+
+                    let id = request.params.id
+                    if(!id) {
+                        return reply(Boom.create(400, 'Bad request', {timestamp: Date.now()}))
+                    }
+
+                    let session = request.auth.credentials
+
+                    if(request.method === 'get') {
+
+                        let resp = await SoapService.customerDetail(id)
+
+                        if(Array.isArray(resp.customer.firstName)) {
+                            resp.customer.firstName = resp.customer.firstName.join(' ')
+                        }
+
+                        if(Array.isArray(resp.customer.surname)) {
+                            resp.customer.surname = resp.customer.surname.join(' ')
+                        }
+
+                        if (!Array.isArray(resp.customer.address)) {
+                            resp.customer.address = [resp.customer.address]
+                        }
+
+                        if (!Array.isArray(resp.customer.phoneNum)) {
+                            resp.customer.phoneNum = [resp.customer.phoneNum]
+                        }
+
+                        return reply.view('customer', {customer: resp.customer, id: resp.id, status: resp.status})
+
+                    }
+
+                    let change_request = request.payload
+
+
+                }
+            }
+        },
+
     ])
 
 }
