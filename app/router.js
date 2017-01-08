@@ -23,7 +23,7 @@ module.exports = function (server) {
 
                     let session = request.auth.credentials
 
-                    return reply.view('index', {username: session.username})
+                    return reply.view('index', {username: session.username, isLogged: true})
 
                 }
             }
@@ -39,11 +39,11 @@ module.exports = function (server) {
                 handler: async function (request, reply) {
 
                     if(request.auth.isAuthenticated) {
-                        return reply.view('index',request.auth.credentials)
+                        return reply.view('index',{isLogged: true})
                     }
 
                     if(request.method === 'get') {
-                        return reply.view('login')
+                        return reply.view('login', {isLogged: false})
                     }
 
                     const db = request.server.plugins['hapi-mongodb'].db;
@@ -53,7 +53,7 @@ module.exports = function (server) {
 
                     if (!user) {
                         //return reply(Boom.notFound('No user registered with given credentials'))
-                        return reply.view('login',{message: "Invalid credentials."})
+                        return reply.view('login',{message: "Invalid credentials.", isLogged: false})
                     }
 
                     const password = request.payload.password;
@@ -61,9 +61,10 @@ module.exports = function (server) {
                     if(await Bcrypt.compare(password, user.password)) {
                         request.server.log('info', 'user authentication successful')
                         request.cookieAuth.set(user);
+                        user.isLogged = true
                         return reply.view('index', user)
                     } else {
-                        return reply.view('login')
+                        return reply.view('login', {isLogged: false})
                     }
                 }
             }
@@ -75,7 +76,7 @@ module.exports = function (server) {
                 auth: 'session',
                 handler: function (request, reply) {
                     request.cookieAuth.clear()
-                    reply("You have been logged out.")
+                    reply.view("index", {message: "You have been successfully logged out.", isLogged: false})
                 }
             }
         },
@@ -97,7 +98,7 @@ module.exports = function (server) {
 
                     let customers = await SoapService.listAllCustomers()
 
-                    reply.view('customers', {customers: customers})
+                    reply.view('customers', {customers: customers, isLogged: true})
 
                 }
             }
@@ -126,7 +127,7 @@ module.exports = function (server) {
                     if(request.method === 'get') {
 
                         if(id === 'new') {
-                            return reply.view('customer', {id: -1, status: 'active'})
+                            return reply.view('customer', {id: -1, status: 'active', isLogged: true})
                         }
 
                         let resp
@@ -152,7 +153,7 @@ module.exports = function (server) {
                             resp.customer.phoneNum = [resp.customer.phoneNum]
                         }
 
-                        return reply.view('customer', {customer: resp.customer, id: resp.id, status: resp.status})
+                        return reply.view('customer', {customer: resp.customer, id: resp.id, status: resp.status, isLogged: true})
 
                     }
 
@@ -166,10 +167,10 @@ module.exports = function (server) {
                             resp = await submitChangeRequest(request.server.plugins['hapi-mongodb'].db, payload)
                         } catch (err) {
 
-                            return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message})
+                            return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message, isLogged: true})
                         }
 
-                        return reply.view('index', {message: 'Change request has been successfully submitted.'})
+                        return reply.view('index', {message: 'Change request has been successfully submitted.', isLogged: true})
                     }
 
                     if(payload.remove === "on") {
@@ -184,10 +185,10 @@ module.exports = function (server) {
                             resp = await submitChangeRequest(request.server.plugins['hapi-mongodb'].db, payload)
                         } catch (err) {
 
-                            return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message})
+                            return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message, isLogged: true})
                         }
 
-                        return reply.view('index', {message: 'Change request has been successfully submitted.'})
+                        return reply.view('index', {message: 'Change request has been successfully submitted.', isLogged: true})
 
                     }
 
@@ -199,10 +200,10 @@ module.exports = function (server) {
                         resp = await submitChangeRequest(request.server.plugins['hapi-mongodb'].db, payload)
                     } catch (err) {
 
-                        return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message})
+                        return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message, isLogged: true})
                     }
 
-                    return reply.view('index', {message: 'Change request has been successfully submitted.'})
+                    return reply.view('index', {message: 'Change request has been successfully submitted.', isLogged: true})
 
 
                 }
