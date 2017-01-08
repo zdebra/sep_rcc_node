@@ -22,6 +22,7 @@
     "hapi-auth-cookie": "^6.1.1",
     "hapi-mongodb": "^6.2.0",
     "inert": "^4.1.0",
+    "lodash": "^4.17.4",
     "mongodb": "^2.2.19",
     "soap": "^0.18.0",
     "vision": "^4.1.1"

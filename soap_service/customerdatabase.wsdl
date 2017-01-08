@@ -21,7 +21,7 @@
 
             <xsd:complexType name="PhoneType">
                 <xsd:sequence>
-                    <xsd:element name="phoneNumberType" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="phoneNumberType" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xsd:element name="phoneNum" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                     <xsd:element name="cityCode" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="countryCode" type="xsd:string" minOccurs="0" maxOccurs="1"/>
