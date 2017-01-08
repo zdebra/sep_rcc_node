@@ -125,6 +125,10 @@ module.exports = function (server) {
 
                     if(request.method === 'get') {
 
+                        if(id === 'new') {
+                            return reply.view('customer', {id: -1, status: 'active'})
+                        }
+
                         let resp
                         try {
                             resp = await SoapService.customerDetail(id)
@@ -153,6 +157,20 @@ module.exports = function (server) {
                     }
 
                     let payload = request.payload
+
+                    if(id === "new") {
+                        payload.requestType = 'create'
+                        payload.id = -1
+                        let resp
+                        try {
+                            resp = await submitChangeRequest(request.server.plugins['hapi-mongodb'].db, payload)
+                        } catch (err) {
+
+                            return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message})
+                        }
+
+                        return reply.view('index', {message: 'Change request has been successfully submitted.'})
+                    }
 
                     if(payload.remove === "on") {
 
