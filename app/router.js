@@ -161,8 +161,7 @@ module.exports = function (server) {
                     } catch (err) {
 
                         // todo write to layout what is wrong
-                        console.error(err)
-                        return reply(Boom.create(400, 'something'), err)
+                        return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message})
                     }
 
                     return reply.view('index', {message: 'Change request has been successfully submitted.'})

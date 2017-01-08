@@ -3,7 +3,7 @@ const createChangeRequest = require('./users').create
 
 function getName(name, label) {
 
-    if (!_.isString(name)) {
+    if (_.isEmpty(name)) {
         throw new Error(`${label} must be defined.`)
     }
     name = name.split(" ")
@@ -22,17 +22,17 @@ function getAddress(payload) {
             return null
         }
 
-        if(!_.isString(streetName)) {
+        if(_.isEmpty(streetName)) {
             throw new Error("Invalid Street name.")
         }
         address.streetName = streetName
 
-        if(!_.isString(streetNumber)) {
+        if(_.isEmpty(streetNumber)) {
             throw new Error("Invalid Street number.")
         }
         address.streetNumber = streetNumber
 
-        if(!_.isString(postalCode)) {
+        if(_.isEmpty(postalCode)) {
             throw new Error("Invalid Postal code.")
         }
         address.postalCode = postalCode
@@ -46,7 +46,7 @@ function getAddress(payload) {
         }
         address.city = city
 
-        if(!_.isString(country)) {
+        if(_.isEmpty(country)) {
             throw new Error("Invalid Country.")
         }
         address.country = country
@@ -83,19 +83,16 @@ function getPhoneNum(payload) {
     let getSingleNum = (phoneNumberType, phoneNum, cityCode, countryCode) => {
 
         let singleNum = {}
-        if(phoneNumberType === undefined
-            && phoneNum === undefined
-            && cityCode == undefined
-            && countryCode == undefined) {
+        if(phoneNumberType === "" && phoneNum === "" && cityCode == "" && countryCode == "") {
             return null
         }
 
-        if(!_.isString(phoneNumberType)) {
+        if(_.isEmpty(phoneNumberType)) {
             throw new Error("Invalid Phone number type.")
         }
         singleNum.phoneNumberType = phoneNumberType
 
-        if(!_.isString(phoneNum)) {
+        if(_.isEmpty(phoneNum)) {
             throw new Error("Invalid Phone number.")
         }
         singleNum.phoneNum = phoneNum
@@ -113,9 +110,9 @@ function getPhoneNum(payload) {
     }
 
     let nums = []
-    let n1 = getSingleNum(payload.phoneNumberType0, payload.phoneNum0, payload.cityCode0, payload.countrCode0)
-    let n2 = getSingleNum(payload.phoneNumberType1, payload.phoneNum1, payload.cityCode1, payload.countrCode1)
-    let n3 = getSingleNum(payload.phoneNumberType2, payload.phoneNum2, payload.cityCode2, payload.countrCode2)
+    let n1 = getSingleNum(payload.phoneNumberType0, payload.phoneNum0, payload.cityCode0, payload.countryCode0)
+    let n2 = getSingleNum(payload.phoneNumberType1, payload.phoneNum1, payload.cityCode1, payload.countryCode1)
+    let n3 = getSingleNum(payload.phoneNumberType2, payload.phoneNum2, payload.cityCode2, payload.countryCode2)
 
     if(n1 != null) {
         nums.push(n1)
@@ -142,7 +139,7 @@ function getBirthNumber(birthNumber) {
 }
 
 function getCountryOfOrigin(countryOfOrigin) {
-    if(!_.isString(countryOfOrigin)) {
+    if(_.isEmpty(countryOfOrigin)) {
         throw new Error("Invalid Country of origin")
     }
     return countryOfOrigin
