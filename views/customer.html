@@ -55,6 +55,10 @@
         <label for="countryOfOrigin">Country of origin</label>
         <input type="text" id="countryOfOrigin" name="countryOfOrigin" value="{{customer.countryOfOrigin}}">
 
+        <div class="float-right">
+            <input type="checkbox" id="remove" name="remove">
+            <label class="label-inline" for="remove">Remove this customer</label>
+        </div>
         <input class="button-primary" type="submit" value="Send change request">
         <strong>{{message}}</strong>
 

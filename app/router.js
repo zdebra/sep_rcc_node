@@ -103,7 +103,7 @@ module.exports = function (server) {
             }
         },
         {
-            method: ['GET', 'POST'],
+            method: ['GET', 'POST', 'PUT'],
             path: '/customer/{id}',
             config: {
                 auth: {
@@ -153,6 +153,27 @@ module.exports = function (server) {
                     }
 
                     let payload = request.payload
+
+                    if(payload.remove === "on") {
+
+                        payload = {
+                            requestType:'delete',
+                            id: Number(id)
+                        }
+
+                        let resp
+                        try {
+                            resp = await submitChangeRequest(request.server.plugins['hapi-mongodb'].db, payload)
+                        } catch (err) {
+
+                            return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message})
+                        }
+
+                        return reply.view('index', {message: 'Change request has been successfully submitted.'})
+
+                    }
+
+
                     payload.requestType = 'update'
                     payload.id = Number(id)
                     let resp
@@ -160,7 +181,6 @@ module.exports = function (server) {
                         resp = await submitChangeRequest(request.server.plugins['hapi-mongodb'].db, payload)
                     } catch (err) {
 
-                        // todo write to layout what is wrong
                         return reply.view('customer', {customer: payload, id: payload.id, status: 'active', message: err.message})
                     }
 
