@@ -1,7 +1,8 @@
 const Boom = require('boom');
 const Users = require('./users')
 const Bcrypt = require('bcrypt')
-let SoapService = require('./soap')
+const SoapService = require('./soap')
+const submitChangeRequest = require('./changeRequest')
 
 module.exports = function (server) {
 
@@ -124,7 +125,12 @@ module.exports = function (server) {
 
                     if(request.method === 'get') {
 
-                        let resp = await SoapService.customerDetail(id)
+                        let resp
+                        try {
+                            resp = await SoapService.customerDetail(id)
+                        } catch (err) {
+                            return reply(Boom.create(500, 'Main service is not responding', {timestamp: Date.now()}))
+                        }
 
                         if(Array.isArray(resp.customer.firstName)) {
                             resp.customer.firstName = resp.customer.firstName.join(' ')
@@ -146,9 +152,20 @@ module.exports = function (server) {
 
                     }
 
-                    let change_request = request.payload
+                    let payload = request.payload
+                    payload.requestType = 'update'
+                    payload.id = Number(id)
+                    let resp
+                    try {
+                        resp = await submitChangeRequest(request.server.plugins['hapi-mongodb'].db, payload)
+                    } catch (err) {
 
+                        // todo write to layout what is wrong
+                        console.error(err)
+                        return reply(Boom.create(400, 'something'), err)
+                    }
 
+                    return reply.view('index', {message: 'Change request has been successfully submitted.'})
 
 
                 }

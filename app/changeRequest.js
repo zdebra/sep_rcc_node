@@ -1,5 +1,5 @@
 const _ = require('lodash')
-
+const createChangeRequest = require('./users').create
 
 function getName(name, label) {
 
@@ -18,12 +18,7 @@ function getAddress(payload) {
 
     let createSingleAdr = (streetName, streetNumber, postalCode, cityPart, city, country) => {
         let address = {}
-        if(streetName === undefined
-            && streetNumber === undefined
-            && postalCode === undefined
-            && cityPart === undefined
-            && city === undefined
-            && country === undefined) {
+        if(streetName === "" && streetNumber === "" && postalCode === "" && cityPart === "" && city === "" && country === "") {
             return null
         }
 
@@ -60,9 +55,9 @@ function getAddress(payload) {
     }
 
     let address = []
-    let a1 = createSingleAdr(payload.streetName0, payload.streetNumber0, payload.postalCode0, payload.cityPart0, payload.city0, payload.country0)
-    let a2 = createSingleAdr(payload.streetName1, payload.streetNumber1, payload.postalCode1, payload.cityPart1, payload.city1, payload.country1)
-    let a3 = createSingleAdr(payload.streetName2, payload.streetNumber2, payload.postalCode2, payload.cityPart2, payload.city2, payload.country2)
+    let a1 = createSingleAdr(payload.streetName0, payload.streetNum0, payload.postalCode0, payload.cityPart0, payload.city0, payload.country0)
+    let a2 = createSingleAdr(payload.streetName1, payload.streetNum1, payload.postalCode1, payload.cityPart1, payload.city1, payload.country1)
+    let a3 = createSingleAdr(payload.streetName2, payload.streetNum2, payload.postalCode2, payload.cityPart2, payload.city2, payload.country2)
 
     if(a1 !== null) {
         address.push(a1)
@@ -153,18 +148,51 @@ function getCountryOfOrigin(countryOfOrigin) {
     return countryOfOrigin
 }
 
-module.exports = async function submitChangeRequest(payload) {
+module.exports = async function submitChangeRequest(db, payload) {
 
-    let cr = {
-        firstName: getName(payload.firstName, 'First name'),
-        surname: getName(payload.surname, 'Surname'),
-        address: getAddress(payload),
-        phoneNum: getPhoneNum(payload),
-        birthNumber: getBirthNumber(payload.birthNumber),
-        countryOfOrigin: getCountryOfOrigin(payload.countryOfOrigin),
+    let cr
+    switch (payload.requestType) {
+
+        case 'create':
+            payload.id = -1
+
+        case 'update':
+            if(!_.isNumber(payload.id)) {
+                throw new Error("Invalid id.")
+            }
+
+            cr = {
+                data: {
+                    firstName: getName(payload.firstName, 'First name'),
+                    surname: getName(payload.surname, 'Surname'),
+                    address: getAddress(payload),
+                    phoneNum: getPhoneNum(payload),
+                    birthNumber: getBirthNumber(payload.birthNum),
+                    countryOfOrigin: getCountryOfOrigin(payload.countryOfOrigin),
+                },
+                customerId: payload.id,
+                requestType: payload.requestType
+            }
+            break
+
+        case 'delete':
+
+            if(!_.isNumber(payload.id)) {
+                throw new Error("Invalid id.")
+            }
+
+            cr = {
+                customerId: payload.id,
+                requestType: payload.requestType
+            }
+            break
+
+        default:
+            throw new Error("Invalid request type.")
     }
 
-    
+    let resp = await createChangeRequest(db, cr)
+    return resp
 
 
 }
