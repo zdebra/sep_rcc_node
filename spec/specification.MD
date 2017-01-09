@@ -23,7 +23,30 @@ brabezd1@fel.cvut.cz
 
 #1. Introdcution <a name="introduction"></a>
 
+## Purpose
+The Request Change Collector is a web application for submitting a change requests 
+for database of clients.  
+
+## Product Scope
+The product offers the ability to create a change requests for existing database layer of clients. The goal is to achieve 
+it in the user friendly package so it will be easy to submit change requests. 
+
 #2. Overall Description <a name="overall"></a>
+
+## Product Perspective
+The application is utilising API of a core application and will be a part of existing 
+product portfolio. The product functionality depends on a functionality of the core 
+application. The app will be using the API for listing all the clients, client’s 
+detail and for submitting a new change request.
+
+## Product Functions
+Following diagrams sums up the customer’s functions.
+
+## Customer functions
+![alt text](./customer.png "Customer")
+
+## System functions
+![alt text](./system.png "System")
 
 #3. External Interface Requirements <a name="external"></a>
 
