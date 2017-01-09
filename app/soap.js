@@ -29,5 +29,20 @@ module.exports = {
 
         return resp.Envelope.Body.ReadCustomerDetailsResponse1
 
+    },
+
+    submitChangeRequest: async function(requestType, customerId, customer) {
+
+
+        let param = {
+            requestType: requestType,
+            id: customerId,
+            customer: customer
+        }
+
+        let resp = await handsoap.request(url,'fel:CreateCustomerChangeOrder', 'http://www.cvut.cz/FEL/CreateCustomerChangeOrder', param, options)
+
+        return resp
+
     }
 }
