@@ -70,6 +70,8 @@ The application requires Mongodb 3.4.1 as main data storage. It is recommended t
 to the whole internet. The batch upload will be held as a cron job and will be delivered as isolated script. The customer
 is responsible for setting up the cron schedule. Customer is also responsible for maintaining the delivered software.
 
+Customer must deliver WDSL describing a core application before project start.
+
 ## User Documentation
 User manual in markdown format describing all application features will be delivered.
 
@@ -79,9 +81,40 @@ be reduced.
 
 #3. External Interface Requirements <a name="external"></a>
 
+## User Interfaces
+There will be a navigation menu in header throughout the whole system containing Home, Create New Customer, 
+Customers List and Login/Logout. The frontend will be written as a thin client in a template framework Handlebars.
 
+### Login screen
+Available for all kinds of users. It contains basic form for filling username and password.
+
+### Main screen
+Available for signed users.
+
+### Customers list screen
+Available for signed users. There is a list of all clients with reduced set of information(Id, First name, Surname and 
+Status). Every table row contains a button for viewing a client detail.
+
+### Customer detail screen
+Available for signed users. The screen holds all the information about selected client:
+- Id
+- Status
+- First name 
+- Surname
+- up to 3 addresses (Street name, Street number, Postal code, City part, City and Country)
+- up to 3 phone numbers (Phone number Type, Phone number, City code, Country Code)
+- Birth number
+- Country of origin
+
+This screen also allows to change attributes (all except Id and Status) and create change request. Also there will be an
+option to create change request to delete detailed customer.
+
+### Create new customer
+This screen allows to submit change request for creating a new customer. It will be same as previous screen, but with
+empty fields.
 
 #4. System Features <a name="system"></a>
+
 
 #5. Other Nonfunctional Requirements <a name="nonfunctional"></a>
 
