@@ -40,15 +40,46 @@ application. The app will be using the API for listing all the clients, client�
 detail and for submitting a new change request.
 
 ## Product Functions
-Following diagrams sums up the customer’s functions.
+Following diagrams sums up the customer’s and system's functions.
 
-## Customer functions
+### Customer functions
 ![alt text](./customer.png "Customer")
 
-## System functions
+### System functions
 ![alt text](./system.png "System")
 
+## User Classes and Characteristics
+
+### Customer
+The customer is basic and only one role which is distinguished by username and password. This user has permissions to 
+do all actions briefly described in diagram above.  
+
+### Anonymous User
+Users without signing in are able to see login page only. 
+
+### System
+This is role for cron job doing a batch upload to the core application 
+
+## Operating Environment
+The application will be shipped as a source codes, including server scripts, static and other configuration files. 
+The application will be horizontal scalable, prepared for deployment in a cluster.
+  
+## Design and Implementation Constraints
+The application requires Mongodb 3.4.1 as main data storage. It is recommended to use Solid State Discs, at least 
+3 replicas and 2 shards. Inbound traffic should be allowed from ports 80 and 443. Outbound traffic needs to be allowed
+to the whole internet. The batch upload will be held as a cron job and will be delivered as isolated script. The customer
+is responsible for setting up the cron schedule. Customer is also responsible for maintaining the delivered software.
+
+## User Documentation
+User manual in markdown format describing all application features will be delivered.
+
+## Assumptions and Dependencies
+The application depends on core application API: the application won't crash without code app, but functionality will 
+be reduced.
+
 #3. External Interface Requirements <a name="external"></a>
+
+
 
 #4. System Features <a name="system"></a>
 
