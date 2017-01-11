@@ -72,6 +72,8 @@ is responsible for setting up the cron schedule. Customer is also responsible fo
 
 Customer must deliver WDSL describing a core application before project start.
 
+All environmental variables will be defined during the application delivery.
+
 ## User Documentation
 User manual in markdown format describing all application features will be delivered.
 
@@ -96,15 +98,7 @@ Available for signed users. There is a list of all clients with reduced set of i
 Status). Every table row contains a button for viewing a client detail.
 
 ### Customer detail screen
-Available for signed users. The screen holds all the information about selected client:
-- Id
-- Status
-- First name 
-- Surname
-- up to 3 addresses (Street name, Street number, Postal code, City part, City and Country)
-- up to 3 phone numbers (Phone number Type, Phone number, City code, Country Code)
-- Birth number
-- Country of origin
+Available for signed users. The screen holds all the information about selected client.
 
 This screen also allows to change attributes (all except Id and Status) and create change request. Also there will be an
 option to create change request to delete detailed customer.
@@ -115,6 +109,71 @@ empty fields.
 
 #4. System Features <a name="system"></a>
 
+## User login and logout
+
+### Description
+User is able to sign on through a login form. User accounts are held in database 
+with encrypted passwords. If user successfully logins then it is stored in a session for 14 days and user is logged 
+immediately if returns in this time period. User is able to logout through a button in main menu.
+
+### Stimulus/Response Sequence
+There is an error message displayed when wrong credentials are given. User is redirected to the main page in case of
+successful login.
+
+The user is redirected to the login page after logout.
+
+### Functional Requirements
+- **REQ-1**: User is able to login into the system. *High priority*
+- **REQ-2**: User is able to logout. *High priority*
+
+## View Customers list
+
+### Description
+Logged in users are able to view list of all customers retrieved from the core application. The list is displayed as 
+a table with Id, First name, Surname and Status.
+
+### Stimulus/Response Sequence
+Every row of table contains a button for accessing the customer detail.
+
+### Functional Requirements
+- **REQ-3**: Users are able to view list of all customers *Medium priority*
+
+## View Customer Detail and Create Change Request
+
+### Description
+Logged users are able to view customer detail with following information:
+- Id
+- Status
+- First name 
+- Surname
+- up to 3 addresses (Street name, Street number, Postal code, City part, City and Country)
+- up to 3 phone numbers (Phone number Type, Phone number, City code, Country Code)
+- Birth number
+- Country of origin
+
+Those fields are displayed as a form with ability to change all fields except Id and Status and create a change request.
+There is also possibility to create change request for removing the customer. 
+
+### Stimulus/Response Sequence
+User fills the form, submits it and values are validated on the server side. The state whether if was or wasn’t 
+successful is displayed and user is redirected to the home page.
+
+### Functional Requirements
+- **REQ-4**: User is able to see customer detail. *High priority*
+- **REQ-5**: User is able to create change request for customer update. *High priority*
+- **REQ-6**: User is able to create change request for customer remove. *Medium priority*
+- **REQ-7**: User is able to create change request for create new customer. *High priority*
+
+## Batch Upload of Submitted Change Requests
+
+### Description and Priority
+The system offers a script which process a batch upload of all submitted change requests.
+
+### Stimulus/Response Sequence
+It is system administrator responsibility to set up cron job which executes such script.
+
+### Functional Requirements
+- **REQ-8**: System makes a batch upload of all submitted change requests to the core application. *Low priority*
 
 #5. Other Nonfunctional Requirements <a name="nonfunctional"></a>
 
