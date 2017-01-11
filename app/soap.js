@@ -1,4 +1,4 @@
-const url = 'http://localhost:8088?wsdl'
+const url = process.env.WSDL_URL
 const handsoap = require('handsoap')
 
 const options = {

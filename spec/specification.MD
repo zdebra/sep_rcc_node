@@ -181,10 +181,14 @@ Response to all actions are under a 2 seconds plus response time of core applica
 on performance is batch upload (**REQ-8**) in case of many change requests.
 
 ## Security Requirements
-The user passwords are stored encrypted. The form data is validated.
+The user passwords are stored encrypted. The form data is validated. All requests are properly handled and responses
+are generated according to http standards.
 
 ## Software Quality Attributes
 Software is tested, maintainable and robust. It is easy for users to use as it has only small amount of features.
+
+## Application Logging
+The application logs all operations to the standard output.
 
 #6. Other Requirements <a name="other"></a>
 Software is in english language.
