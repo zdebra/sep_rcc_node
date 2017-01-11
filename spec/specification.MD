@@ -12,7 +12,6 @@ brabezd1@fel.cvut.cz
 4. [System Features](#system)
 5. [Other Nonfunctional Requirements](#nonfunctional)
 6. [Other Requirements](#other)
-7. [AppendixA: Analysis Model ](#analysis)
 
 # Revision History
 
@@ -177,6 +176,15 @@ It is system administrator responsibility to set up cron job which executes such
 
 #5. Other Nonfunctional Requirements <a name="nonfunctional"></a>
 
-#6. Other Requirements <a name="other"></a>
+## Performance Requirements
+Response to all actions are under a 2 seconds plus response time of core application API calls. Most critical part 
+on performance is batch upload (**REQ-8**) in case of many change requests.
 
-#AppendixA: Analysis Model <a name="analysis"></a>
+## Security Requirements
+The user passwords are stored encrypted. The form data is validated.
+
+## Software Quality Attributes
+Software is tested, maintainable and robust. It is easy for users to use as it has only small amount of features.
+
+#6. Other Requirements <a name="other"></a>
+Software is in english language.
